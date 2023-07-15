@@ -9,6 +9,7 @@ using System.Data;
 
 namespace CodePulse.API.Controllers
 {
+    // https://localhost:xxxx/api/categories
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
@@ -41,6 +42,27 @@ namespace CodePulse.API.Controllers
                 UrlHandle = category.UrlHandle
             };
 
+            return Ok(response);
+        }
+
+        // GET: https://localhost:7070/api/Categories
+        [HttpGet]
+        public async Task<IActionResult>  GetAllCategories()
+        {
+            var categories = await _categoryRepository.GetAllAsync();
+
+            // Map Domain model to DTO
+            var response = new List<CategoryDto>();
+
+            foreach (var category in categories)
+            {
+                response.Add(new CategoryDto
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    UrlHandle = category.UrlHandle
+                });
+            }
             return Ok(response);
         }
     }
